@@ -19,10 +19,12 @@ import { tableEditingKey } from './util';
 export { CellBookmark, CellSelection } from './cellselection';
 export type { CellSelectionJSON } from './cellselection';
 export {
-  columnResizing,
   columnResizingPluginKey,
   ResizeState,
+  columnResizing,
 } from './columnresizing';
+export { 
+  rowResizing } from './rowresizing'
 export type { ColumnResizingOptions, Dragging } from './columnresizing';
 export * from './commands';
 export {

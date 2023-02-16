@@ -28,7 +28,7 @@ import {
   goToNextCell,
   deleteTable,
 } from '../src';
-import { tableEditing, columnResizing, tableNodes, fixTables } from '../src';
+import { tableEditing, columnResizing, rowResizing, tableNodes, fixTables } from '../src';
 
 const schema = new Schema({
   nodes: baseSchema.spec.nodes.append(
@@ -44,6 +44,16 @@ const schema = new Schema({
           setDOMAttr(value, attrs) {
             if (value)
               attrs.style = (attrs.style || '') + `background-color: ${value};`;
+          },
+        },
+        height: {
+          default: null,
+          getFromDOM(dom) {
+            return dom.style.height || 38;
+          },
+          setDOMAttr(value, attrs) {
+            if (value)
+              attrs.style = (attrs.style || '') + `height: ${value}px;`;
           },
         },
       },
@@ -84,6 +94,7 @@ let state = EditorState.create({
   doc,
   plugins: [
     columnResizing(),
+    rowResizing(),
     tableEditing(),
     keymap({
       Tab: goToNextCell(1),

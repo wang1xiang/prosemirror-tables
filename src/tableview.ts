@@ -84,3 +84,37 @@ export function updateColumnsOnResize(
     table.style.minWidth = totalWidth + 'px';
   }
 }
+
+/**
+ * @public
+ */
+export function updateColumnsOnResizeRow(
+  node: Node,
+  colgroup: HTMLTableColElement,
+  table: HTMLTableElement,
+  overrideCol?: number,
+  overrideValue?: number,
+): void {
+  let nextDOM = colgroup.firstChild as HTMLElement;
+  const row = node.firstChild;
+  if (!row) return;
+  for (let i = 0, col = 0; i < row.childCount; i++) {
+    const { colspan } = row.child(i).attrs as CellAttrs;
+    for (let j = 0; j < colspan; j++, col++) {
+      const cssHeight = overrideValue + 'px';
+      if (!nextDOM) {
+        colgroup.appendChild(document.createElement('col')).style.height =
+          cssHeight;
+      } else {
+        if (nextDOM.style.height != cssHeight) nextDOM.style.height = cssHeight;
+        nextDOM = nextDOM.nextSibling as HTMLElement;
+      }
+    }
+  }
+
+  while (nextDOM) {
+    const after = nextDOM.nextSibling;
+    nextDOM.parentNode?.removeChild(nextDOM);
+    nextDOM = after as HTMLElement;
+  }
+}

@@ -120,7 +120,17 @@ export type TableNodes = Record<
  * @public
  */
 export function tableNodes(options: TableNodesOptions): TableNodes {
-  const extraAttrs = options.cellAttributes || {};
+  const extraAttrs = { ...options.cellAttributes, 
+    height: {
+      default: null,
+      getFromDOM(dom) {
+        return dom.style.height || 38;
+      },
+      setDOMAttr(value, attrs) {
+        if (value)
+          attrs.style = (attrs.style || '') + `height: ${value}px;`;
+      },
+    }} || {};
   const cellAttrs: Record<string, AttributeSpec> = {
     colspan: { default: 1 },
     rowspan: { default: 1 },
